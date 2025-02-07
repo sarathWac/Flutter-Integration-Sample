@@ -43,6 +43,7 @@ android {
 
 dependencies {
 
+    // importing flutter dependencies
     implementation(project(":flutter"))
 
     implementation(libs.androidx.core.ktx)

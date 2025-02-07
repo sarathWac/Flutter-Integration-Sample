@@ -18,7 +18,10 @@ import io.flutter.plugin.common.MethodChannel
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
+//The unique identifier for the Flutter engine instance. Used to cache engine and retrieve it.
 private const val ENGINE_ID = "sample_flutter_engine_id"
+
+//The name of the Method Channel used for communication between Flutter and Android.
 private const val CHANNEL = "com.example.app/channel"
 
 
@@ -29,14 +32,33 @@ class FlutterLaunchFragment : Fragment() {
     private lateinit var channel: MethodChannel
 
 
+    /**
+     * The FlutterEngine instance that manages the Flutter runtime.
+     *
+     *  - **Initial Navigation Route:** The `/sendReceive` route is set as the initial route. This means
+     *    that when Flutter starts, it will navigate to this route by default.
+     *  - **Default Dart Entrypoint:** The default Dart entrypoint (main()) is executed. This starts
+     *    the execution of your Flutter application code.
+     *
+     *  The `FlutterEngine` is responsible for:
+     *    - Executing Dart code.
+     *    - Rendering Flutter UI.
+     *    - Handling platform channels.
+     *    - Managing the Flutter lifecycle.
+     *
+     * @see FlutterEngine
+     * @see io.flutter.plugin.common.MethodChannel
+     * @see io.flutter.plugin.common.EventChannel
+     * @see DartExecutor.DartEntrypoint
+     */
     private val flutterEngine: FlutterEngine by lazy {
         FlutterEngine(requireContext()).apply {
+            // Set the initial route to navigate to when Flutter starts (optional)
             navigationChannel.setInitialRoute("/sendReceive")
             dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault())
         }
     }
 
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
@@ -46,8 +68,11 @@ class FlutterLaunchFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-        // Cache the FlutterEngine to be used by FlutterActivity.
-        // Could be created only when we are sure the user going to navigate to module
+        /**
+         * Cache the FlutterEngine to be used by FlutterActivity.
+         *
+         * Could be created only when we are sure the user going to navigate to module
+         */
         FlutterEngineCache
             .getInstance()
             .put(ENGINE_ID, flutterEngine)
@@ -62,7 +87,6 @@ class FlutterLaunchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _binding = FragmentFlutterLaunchBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -78,7 +102,12 @@ class FlutterLaunchFragment : Fragment() {
             )
         }
 
-        // MethodChannel handler for receiving data from Flutter
+        /**
+         * Set up a MethodChannel handler.
+         * This handler is responsible for handling method calls from Flutter.
+         *
+         * Here we can send/receive data from flutter
+         */
         channel.setMethodCallHandler { call, result ->
             when(FlutterChannelAction.getAction(call.method)){
                 FlutterChannelAction.SEND_DATA -> {

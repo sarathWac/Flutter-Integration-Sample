@@ -23,6 +23,7 @@ dependencyResolutionManagement {
 rootProject.name = "Flutter Module Integration"
 include(":app")
 
+//include flutter module
 //replace 'flutter_module' with name of the module we ant to integrate
 val moduleDir = settingsDir.parentFile.listFiles()?.firstOrNull { it.isDirectory }
 val filePath = "${moduleDir?.absolutePath}/flutter_module/.android/include_flutter.groovy"
