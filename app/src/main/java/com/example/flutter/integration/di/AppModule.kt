@@ -23,6 +23,8 @@ object AppModule {
     private const val BASE_URL = "https://api.etherscan.io/"
     private const val API_KEY = "TBNS13AJHXHK7X6SF72GVENCMAEQQ7R5SA"
 
+
+
     @Provides
     @Singleton
     fun providesOkHttpClient(): OkHttpClient {
