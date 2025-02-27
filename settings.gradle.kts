@@ -25,7 +25,8 @@ include(":app")
 
 //include flutter module
 //replace 'flutter_module' with name of the module we ant to integrate
-val moduleDir = settingsDir.parentFile.listFiles()?.firstOrNull { it.isDirectory }
+val moduleDir = rootProject.projectDir
+println(moduleDir?.absolutePath)
 val filePath = "${moduleDir?.absolutePath}/flutter_module/.android/include_flutter.groovy"
 
 val file = File(filePath)
